@@ -1,0 +1,24 @@
+SELECT E.Fname, E.Minit, E.Lname
+FROM EMPLOYEE E, DEPENDENT D
+WHERE E.Ssn = D.Essn AND E.Fname = D.Dependent_name;
+
+SELECT Fname, Minit, Lname
+FROM EMPLOYEE JOIN DEPENDENT ON EMPLOYEE.Ssn = DEPENDENT.Essn
+WHERE EMPLOYEE.fname = DEPENDENT.Dependent_name;
+
+SELECT E1.Fname
+FROM EMPLOYEE E1, (SELECT E2.ssn FROM EMPLOYEE E2 WHERE E2.Fname = 'James' AND E2.Lname = 'Borg') E2
+WHERE E1.Super_ssn = E2.Ssn;
+
+
+SELECT P.Pname, sumHour
+FROM PROJECT P,
+(SELECT W.Pno As Wpno, SUM(W.Hour) As sumHour
+FROM WORKS_ON W GROUP BY W.Pno)
+WHERE P.Pnumber = Wpno;
+
+SELECT E.Lname
+FROM EMPLOYEE E, WORKS_ON W,
+(SELECT COUNT(W.Pno) as co2 FROM WORKS_ON W GROUP BY W.Essn),
+(SELECT COUNT(P.Pnumber) as co1 FROM PROJECT P)
+WHERE W.Essn = E.ssn AND co1 = co2;

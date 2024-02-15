@@ -1,0 +1,90 @@
+Script started on 2023-11-20 18:25:03-05:00 [TERM="xterm" TTY="/dev/pts/37" COLUMNS="80" LINES="26"]
+[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ sqlplus nguyen4e
+[?2004l
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Nov 20 18:25:11 2023
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Enter password: [KEnter password: [K[?2004h[KEnter password: [17G[17G[KEnter password: *[18G[18G[KEnter password: **[19G[19G[KEnter password: ***[20G[20G[KEnter password: ****[21G[21G[KEnter password: *****[22G[22G[KEnter password: ******[23G[23G[KEnter password: *******[24G[24G[KEnter password: ********[25G[25G[KEnter password: *********[26G[26G[KEnter password: **********[27G[27G[KEnter password: ***********[28G[28G[KEnter password: ************[29G[29G[KEnter password: *************[30G[30G[KEnter password: **************[31G[31G[KEnter password: ***************[32G[32G[32G[17G[?2004l[KEnter password: [17G
+[K
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> [KSQL> [K[?2004hSQL> @[K[7mSELECT R.Fullname, R.RPHONE[27m
+[7mFROM RCONTACT R, GROWSCROPS G[27m
+[7mWHERE R.REGIONID = G.REGIONID AND G.CROP = 'potatoes';[27m[A[A[C[C[C[C[C[?2004l[K
+[K
+[K[A[A[C[C[C[C[CSELECT R.Fullname, R.RPHONE
+  2  FROM RCONTACT R, GROWSCROPS G
+  3  WHERE R.REGIONID = G.REGIONID AND G.CROP = 'potatoes';
+
+FULLNAME		  RPHONE
+------------------------- ---------------
+Southwest Ontario
+Eastern Ontario 	  1(733)524-0100
+Southeastern Ontario	  1(877)633-2000
+
+SQL> [KSQL> [K[?2004hSQL> SELECT R.Regname, RC.Fullname, RC.RPHONE[C[C[C[C[C[?2004l[K[K[?2004hFROM RContact RC, Region R, GROWSCROPS G[?2004l[KSELECT R.Regname, RC.Fullname, RC.RPHONE
+  2  [K[?2004h  2  WHERE R.Regionid = G.Regionid[C[C[C[C[C[?2004l[KFROM RContact RC, Region R, GROWSCROPS G
+  3  [K[?2004h  3  AND R.Regionid = RC.Regionid[C[C[C[C[C[?2004l[KWHERE R.Regionid = G.Regionid
+  4  [K[?2004h  4  GROUP BY R.Regname, RC.Fullname, RC.RPHONE[C[C[C[C[C[?2004l[KAND R.Regionid = RC.Regionid
+  5  [K[?2004h  5  HAVING SUM(G.Revenue)[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[?2004l[K  5  GROUP BY R.Regname, RC.Fullname, RC.RPHONE
+  6  [K[?2004h  6  HAVING SUM(G.Revenue) > 10;[C[C[C[C[C[?2004l[KHAVING SUM(G.Revenue) > 10;
+
+REGNAME 	FULLNAME		  RPHONE
+--------------- ------------------------- ---------------
+SC		Southcentral Ontario	  1(866)663 3161
+EO		Eastern Ontario 	  1(733)524-0100
+SWO		Southwest Ontario
+SEO		Southeastern Ontario	  1(877)633-2000
+
+SQL> [KSQL> [K[?2004hSQL> SELECT R.Regionid, COUNT(DISTINCT F.Ssn)[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C As NumberofFarmer, COUNT(DISTINCT G.crop)[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+[C[C[C[C[C[C[C As NumberofCrop, SUM(G.Revenue)[C[C[C[C[C[C[C[C[C[C[C As Total[A[C[C[C[C[C[?2004l[K
+[K[A[C[C[C[C[C[K[?2004hFROM REGION R, GROWSCROPS G, FARMER F[?2004l[KSELECT R.Regionid, COUNT(DISTINCT F.Ssn) As NumberofFarmer, COUNT(DISTINCT G.crop) As NumberofCrop, SUM(G.Revenue) As Total
+  2  [K[?2004h  2  WHERE R.Regionid = G.Regionid AND G.Ssn = F.Ssn[C[C[C[C[C[?2004l[KFROM REGION R, GROWSCROPS G, FARMER F
+  3  [K[?2004h  3  GROUP BY R.Regionid;[C[C[C[C[C[K[?2004l[K  3  WHERE R.Regionid = G.Regionid AND G.Ssn = F.Ssn
+  4  [K[?2004h  4  GROUP BY R.Regionid;[C[C[C[C[C[?2004l[KGROUP BY R.Regionid;
+
+  REGIONID NUMBEROFFARMER NUMBEROFCROP	    TOTAL
+---------- -------------- ------------ ----------
+	 1		2	     3	     15.5
+	 2		1	     1	       11
+	 3		2	     1	     29.3
+	 4		1	     1	     10.3
+
+SQL> [KSQL> [K[?2004hSQL> SELECT DISTINCT F.Name As FarmerName, R.Regname As Regname[C[C[C[C[C[?2004l[K[K[?2004hFROM REGION R, GROWSCROPS G, FARMER F[?2004l[KSELECT DISTINCT F.Name As FarmerName, R.Regname As Regname
+  2  [K[?2004h  2  WHERE F.Ssn = G.Ssn AND G.Regionid = R.Regionid;[C[C[C[C[C[K[?2004l[K  2  FROM REGION R, GROWSCROPS G, FARMER F
+  3  [K[?2004h  3  WHERE F.Ssn = G.Ssn AND G.Regionid = R.Regionid;[C[C[C[C[C[?2004l[KWHERE F.Ssn = G.Ssn AND G.Regionid = R.Regionid;
+
+FARMERNAME	REGNAME
+--------------- ---------------
+Ted Tam 	SEO
+Monica Kap	SWO
+Peter Good	EO
+Jobe Bata	SWO
+Kate Lee	SC
+Ted Tam 	SC
+
+6 rows selected.
+
+SQL> [KSQL> [K[?2004hSQL> SELECT DISTINCT G.crop, G.Regionid, R.Regname[C[C[C[C[C[?2004l[K[K[?2004hFROM Growscrops G, Region R[?2004l[KSELECT DISTINCT G.crop, G.Regionid, R.Regname
+  2  [K[?2004h  2  WHERE G.Regionid = R.Regionid AND G.crop IN(SELECT G.crop[C[C[C[C[C[?2004l[KFROM Growscrops G, Region R
+  3  [K[?2004h  3  FROM Growscrops G[C[C[C[C[C[?2004l[KWHERE G.Regionid = R.Regionid AND G.crop IN(SELECT G.crop
+  4  [K[?2004h  4  GROUP BY G.crop[C[C[C[C[C[?2004l[KFROM Growscrops G
+  5  [K[?2004h  5  HAVING COUNT(DISTINCT G.Regionid)[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[?2004l[K  5  GROUP BY G.crop
+  6  [K[?2004h  6  HAVING COUNT(DISTINCT G.Regionid) = 1);[C[C[C[C[C[?2004l[KHAVING COUNT(DISTINCT G.Regionid) = 1);
+
+CROP		  REGIONID REGNAME
+--------------- ---------- ---------------
+carrots 		 1 SWO
+peas			 3 SC
+corn			 1 SWO
+
+SQL> [KSQL> [K[?2004hSQL> exit[?2004l[Kexit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ exit
+[?2004lexit
+
+Script done on 2023-11-20 18:26:28-05:00 [COMMAND_EXIT_CODE="0"]

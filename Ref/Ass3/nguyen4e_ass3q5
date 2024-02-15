@@ -1,0 +1,24 @@
+SELECT p1.PNAME
+FROM Project P1, (SELECT P.Pnumber As pNum FROM Project P, WORKS_ON W WHERE W.Pno =  P.Pnumber
+GROUP BY W.Pno HAVING SUM(W.Hour) = (SELECT MAX(sumHour) FROM (SELECT SUM(W.Hour) As sumHour 
+FROM WORKS_ON W GROUP BY W.Pno))) S
+WHERE S.pNum = P1.Pnumber;
+
+
+SELECT SUM(W.Hour)
+FROM WORKS_ON W, (SELECT P.Pnumber As pNum FROM Project P, WORKS_ON W WHERE W.Pno =  P.Pnumber 
+GROUP BY W.Pno HAVING SUM(W.Hour) > (SELECT AVG(sumHour) FROM (SELECT SUM(W.Hour) As sumHour 
+FROM WORKS_ON W GROUP BY W.Pno))) s
+WHERE W.Pno = s.pNum
+GROUP BY W.Pno;
+
+SELECT p1.PNAME
+FROM Project P1, (SELECT P.Pnumber As pNum FROM Project P, WORKS_ON W WHERE W.Pno =  P.Pnumber
+GROUP BY W.Pno HAVING SUM(W.Hour) >= (SELECT MIN(sumHour) FROM (SELECT SUM(W.Hour) As sumHour 
+FROM WORKS_ON W GROUP BY W.Pno)) + 20) S
+WHERE S.pNum = P1.Pnumber;
+
+
+
+
+
