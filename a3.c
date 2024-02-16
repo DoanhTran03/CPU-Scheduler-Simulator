@@ -102,7 +102,7 @@ void FIFO_handler()
     // sort so that process ID in output comes in Original order (just for interactivity)
     qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorPID);
 
-    // Print out the result on console
+    // Print out the result on console.
     printf("\n------------------------------------------------------");
     printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
     for (int i = 0; i < pnum; i++)
