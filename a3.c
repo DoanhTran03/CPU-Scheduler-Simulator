@@ -222,10 +222,14 @@ void SRTF_handler()
                 }
             }
         }
-        // Output
+        // Output the result to the console
+        printf("-------------------------------------------------------");
         printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
         for (int i = 0; i < pnum; i++)
             printf("%d\t\t%d\t%d\t\t%d\t%d\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
+
+        printf("\nAverage Turn Around time= %f ", (float)sum_tat / pnum);
+        printf("\nAverage Waiting Time= %f ", (float)sum_wt / pnum);
     }
 }
 
