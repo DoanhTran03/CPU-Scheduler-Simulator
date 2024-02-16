@@ -35,7 +35,7 @@ int comparatorPID(const void *a, const void *b)
     else if (x >= y)
         return 1; // Sort
 }
-//-------End of Supporting function for FIFO_handler()-----------
+//-------End of Supporting function for FIFO_handler()------------
 
 void FIFO_handler()
 {
