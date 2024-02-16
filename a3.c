@@ -10,6 +10,7 @@ struct process_struct
     int at;                      // Arrival Time
     int bt;                      // CPU Burst time
     int ct, wt, tat, start_time; // Completion, waiting, turnaround, response time
+    int bt_remaining;
 } ps[100];
 
 int findmax(int a, int b)
@@ -235,10 +236,76 @@ void SRTF_handler()
     printf("\nAverage Waiting Time= %f ", (float)sum_wt / pnum);
 }
 
+void RR_handler()
+{
+    int choice;
+    int pnum;
+
+    bool visited[100] = {false}, is_first_process = true;
+    int current_time = 0, max_completion_time;
+    int completed = 0, tq, total_idle_time = 0, length_cycle;
+    int queue[100], front = -1, rear = -1;
+    float sum_tat = 0, sum_wt = 0, sum_rt = 0;
+
+    printf("\n-----------------------------------------------------\nPlease chosose your type of input:\n1/Manually input\n2/File input\n");
+    scanf("%d", &choice);
+    if (choice == 1)
+    {
+        //--------------------------Ask user manually type in the information---------------------------------
+        printf("Please enter the number of process\n");
+        scanf("%d", &pnum);
+        printf("Please enter the time quantum\n");
+        scanf("%d", &tq);
+
+        for (int i = 0; i < pnum; i++)
+        {
+            printf("Please enter arrival time for proccess #%d\n", i);
+            scanf("%d", &ps[i].at);
+            ps[i].pid = i;
+            printf("Please enter bursttime for process #%d\n", i);
+            scanf("%d", &ps[i].bt);
+            ps[i].bt_remaining = ps[i].bt;
+        }
+    }
+    else if (choice == 2)
+    {
+        //-------------------------Ask input by file type-------------------------
+        int array[500], i = 0, arrayLength;
+        char filename[30];
+
+        printf("\n-----------------------------------------------------\nPlease enter the file name:\n");
+        scanf("%s", filename);
+        FILE *fp;
+
+        fp = fopen(filename, "r");
+
+        while (fscanf(fp, "%d", &array[i]) != EOF)
+        {
+            i++;
+        }
+        fclose(fp);
+        pnum = i / 2;
+
+        i = 0;
+        tq = array[0]; // Get the time quantum as the first number of the file
+        for (int j = 1; j < pnum * 2; j = j + 2)
+        {
+            ps[i].pid = i;
+            ps[i].at = array[j];
+            ps[i].bt = array[j + 1];
+            ps[i].bt_remaining = ps[i].bt;
+            i++;
+        }
+    }
+    printf("%d", tq);
+    printf("%d", ps[0].at);
+    printf("%d", ps[0].bt);
+}
+
 int main(int argc, char *argv[])
 {
     int cpuTypeCode;
-    printf("\n-----------------------------------------------------------------------------------\nPlease enter your type of CPU scheduling (Enter the corresponding number to console, Ex: 1 or 2 or 3, ....):\n1/ First-In-First_Out(FIFO)\n2/ Shortest Remaining Time First (SRTF)\n3/ Round Robin (RR)\n3/ Priority Scheduling\n");
+    printf("\n-----------------------------------------------------------------------------------\nPlease enter your type of CPU scheduling (Enter the corresponding number to console, Ex: 1 or 2 or 3, ....):\n1/ First-In-First_Out(FIFO)\n2/ Shortest Remaining Time First (SRTF)\n3/ Round Robin (RR)\n4/ Priority Scheduling\n");
     scanf("%d", &cpuTypeCode);
     switch (cpuTypeCode)
     {
@@ -249,6 +316,7 @@ int main(int argc, char *argv[])
         SRTF_handler();
         break;
     case 3: // Round Robin (RR)
+        RR_handler();
         break;
     case 4: // Priority Scheduling
         break;
