@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <limits.h>
 
 //--------Supporting function for FIFO_handler()-----------
 struct process_struct
@@ -116,7 +118,11 @@ void SRTF_handler()
 {
     int choice;
     int pnum;
-    int sum_tat, sum_wt;
+    float bt_remaining[100];
+    bool is_completed[100] = {false}, is_first_process = true;
+    int current_time = 0;
+    int completed = 0;
+    float sum_tat = 0, sum_wt = 0, prev = 0;
 
     printf("\n-----------------------------------------------------\nPlease chosose your type of input:\n1/Manually input\n2/File input\n");
     scanf("%d", &choice);
@@ -159,10 +165,68 @@ void SRTF_handler()
             ps[i].pid = i;
             ps[i].at = array[j];
             ps[i].bt = array[j + 1];
+            bt_remaining[i] = ps[i].bt;
             i++;
         }
+
+        while (completed != pnum)
+        {
+            // find process with min. burst time in ready queue at current time
+            int min_index = -1;
+            int minimum = INT_MAX;
+            for (int i = 0; i < pnum; i++)
+            {
+                if (ps[i].at <= current_time && is_completed[i] == false)
+                {
+                    if (bt_remaining[i] < minimum)
+                    {
+                        minimum = bt_remaining[i];
+                        min_index = i;
+                    }
+                    if (bt_remaining[i] == minimum)
+                    {
+                        if (ps[i].at < ps[min_index].at)
+                        {
+                            minimum = bt_remaining[i];
+                            min_index = i;
+                        }
+                    }
+                }
+            }
+
+            if (min_index == -1)
+            {
+                current_time++;
+            }
+            else
+            {
+                if (bt_remaining[min_index] == ps[min_index].bt)
+                {
+                    ps[min_index].start_time = current_time;
+                    is_first_process = false;
+                }
+                bt_remaining[min_index] -= 1;
+                current_time++;
+                prev = current_time;
+                if (bt_remaining[min_index] == 0)
+                {
+                    ps[min_index]
+                        .ct = current_time;
+                    ps[min_index].tat = ps[min_index].ct - ps[min_index].at;
+                    ps[min_index].wt = ps[min_index].tat - ps[min_index].bt;
+
+                    sum_tat += ps[min_index].tat;
+                    sum_wt += ps[min_index].wt;
+                    completed++;
+                    is_completed[min_index] = true;
+                }
+            }
+        }
+        // Output
+        printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
+        for (int i = 0; i < pnum; i++)
+            printf("%d\t\t%d\t%d\t\t%d\t%d\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
     }
-    printf("This is SRTF");
 }
 
 int main(int argc, char *argv[])
