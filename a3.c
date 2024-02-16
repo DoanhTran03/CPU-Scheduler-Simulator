@@ -239,13 +239,13 @@ void SRTF_handler()
 void RR_handler()
 {
     int choice;
-    int pnum;
+    int pnum, index;
 
     bool visited[100] = {false}, is_first_process = true;
-    int current_time = 0, max_completion_time;
-    int completed = 0, tq, total_idle_time = 0, length_cycle;
+    int current_time = 0;
+    int completed = 0, tq;
     int queue[100], front = -1, rear = -1;
-    float sum_tat = 0, sum_wt = 0, sum_rt = 0;
+    float sum_tat = 0, sum_wt = 0;
 
     printf("\n-----------------------------------------------------\nPlease chosose your type of input:\n1/Manually input\n2/File input\n");
     scanf("%d", &choice);
@@ -270,7 +270,7 @@ void RR_handler()
     else if (choice == 2)
     {
         //-------------------------Ask input by file type-------------------------
-        int array[500], i = 0, arrayLength;
+        int array[500], k = 0;
         char filename[30];
 
         printf("\n-----------------------------------------------------\nPlease enter the file name:\n");
@@ -279,27 +279,101 @@ void RR_handler()
 
         fp = fopen(filename, "r");
 
-        while (fscanf(fp, "%d", &array[i]) != EOF)
+        while (fscanf(fp, "%d", &array[k]) != EOF)
         {
-            i++;
+            k++;
         }
         fclose(fp);
-        pnum = i / 2;
-
-        i = 0;
+        pnum = k / 2;
+        k = 0;
         tq = array[0]; // Get the time quantum as the first number of the file
         for (int j = 1; j < pnum * 2; j = j + 2)
         {
-            ps[i].pid = i;
-            ps[i].at = array[j];
-            ps[i].bt = array[j + 1];
-            ps[i].bt_remaining = ps[i].bt;
-            i++;
+            ps[k].pid = k;
+            ps[k].at = array[j];
+            ps[k].bt = array[j + 1];
+            ps[k].bt_remaining = ps[k].bt;
+            k++;
         }
     }
-    printf("%d", tq);
-    printf("%d", ps[0].at);
-    printf("%d", ps[0].bt);
+
+    // sort structure on the basis of Arrival time in increasing order
+    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorAT);
+    // q.push(0);
+    front = rear = 0;
+    queue[rear] = 0;
+    visited[0] = true;
+
+    while (completed != pnum)
+    {
+        index = queue[front];
+        // q.pop();
+        front++;
+
+        if (ps[index].bt_remaining == ps[index].bt)
+        {
+            ps[index].start_time = findmax(current_time, ps[index].at);
+            current_time = ps[index].start_time;
+            is_first_process = false;
+        }
+
+        if (ps[index].bt_remaining - tq > 0)
+        {
+            ps[index].bt_remaining -= tq;
+            current_time += tq;
+        }
+        else
+        {
+            current_time += ps[index].bt_remaining;
+            ps[index].bt_remaining = 0;
+            completed++;
+
+            ps[index].ct = current_time;
+            ps[index].tat = ps[index].ct - ps[index].at;
+            ps[index].wt = ps[index].tat - ps[index].bt;
+
+            sum_tat += ps[index].tat;
+            sum_wt += ps[index].wt;
+        }
+        // check which new Processes needs to be pushed to Ready Queue from Input list
+        for (int i = 1; i < pnum; i++)
+        {
+            if (ps[i].bt_remaining > 0 && ps[i].at <= current_time && visited[i] == false)
+            {
+                // q.push(i);
+                queue[++rear] = i;
+                visited[i] = true;
+            }
+        }
+
+        if (ps[index].bt_remaining > 0)
+            // q.push(index);
+            queue[++rear] = index;
+
+        if (front > rear)
+        {
+            for (int i = 1; i < pnum; i++)
+            {
+                if (ps[i].bt_remaining > 0)
+                {
+                    queue[rear++] = i;
+                    visited[i] = true;
+                    break;
+                }
+            }
+        }
+        printf("Hello");
+    } // end of while
+
+    // sort so that process ID in output comes in Original order (just for interactivity- Not needed otherwise)
+    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorPID);
+
+    // Output
+    printf("\nProcess No.\tAT\tCPU Burst Time\tStart Time\tCT\tTAT\tWT\n");
+    for (int i = 0; i < pnum; i++)
+        printf("%d\t\t%d\t%d\t\t%d\t\t%d\t%d\t%d\n", i, ps[i].at, ps[i].bt, ps[i].start_time, ps[i].ct, ps[i].tat, ps[i].wt);
+    printf("\nAverage Turn Around time= %.2f", (float)(sum_tat / pnum));
+    printf("\nAverage Waiting Time= %.2f", (float)(sum_wt / pnum));
 }
 
 int main(int argc, char *argv[])
