@@ -11,6 +11,7 @@ struct process_struct
     int bt;                      // CPU Burst time
     int ct, wt, tat, start_time; // Completion, waiting, turnaround, response time
     int bt_remaining;
+    int priority;
 } ps[100];
 
 int findmax(int a, int b)
@@ -376,6 +377,66 @@ void RR_handler()
     printf("\nAverage Waiting Time= %.2f", (float)(sum_wt / pnum));
 }
 
+void PS_handler()
+
+{
+    int choice;
+    int pnum;
+    bool is_completed[100] = {false};
+    int bt_remaining[100];
+    int current_time = 0;
+    int completed = 0;
+    float sum_tat = 0, sum_wt = 0;
+
+    printf("\n-----------------------------------------------------\nPlease chosose your type of input:\n1/Manually input\n2/File input\n");
+    scanf("%d", &choice);
+    if (choice == 1)
+    {
+        //--------------------------Ask user manually type in the information---------------------------------
+        printf("Please enter the number of process\n");
+        scanf("%d", &pnum);
+        for (int i = 0; i < pnum; i++)
+        {
+            ps[i].pid = i;
+            printf("Please enter arrival time for proccess #%d\n", i);
+            scanf("%d", &ps[i].at);
+            printf("Please enter bursttime for process #%d\n", i);
+            scanf("%d", &ps[i].bt);
+            printf("Please enter priority for process #%d\n", i);
+            scanf("%d", &ps[i].priority);
+        }
+    }
+    else if (choice == 2)
+    {
+        //-------------------------Ask input by file type-------------------------
+        int array[500], i = 0, arrayLength;
+        char filename[30];
+
+        printf("\n-----------------------------------------------------\nPlease enter the file name:\n");
+        scanf("%s", filename);
+        FILE *fp;
+
+        fp = fopen(filename, "r");
+
+        while (fscanf(fp, "%d", &array[i]) != EOF)
+        {
+            i++;
+        }
+        fclose(fp);
+        pnum = i / 3;
+
+        i = 0;
+        for (int j = 0; j < pnum * 2; j = j + 3)
+        {
+            ps[i].pid = i;
+            ps[i].at = array[j];
+            ps[i].bt = array[j + 1];
+            ps[i].priority = array[j + 2];
+            i++;
+        }
+        printf("%d", ps[0].priority);
+    }
+}
 int main(int argc, char *argv[])
 {
     int cpuTypeCode;
@@ -393,6 +454,7 @@ int main(int argc, char *argv[])
         RR_handler();
         break;
     case 4: // Priority Scheduling
+        PS_handler();
         break;
     default:
         printf("Please enter the valid format");
