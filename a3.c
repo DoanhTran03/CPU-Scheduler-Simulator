@@ -138,6 +138,8 @@ void SRTF_handler()
             scanf("%d", &ps[i].at);
             printf("Please enter bursttime for process #%d\n", i);
             scanf("%d", &ps[i].bt);
+            ps[i].pid = i;
+            bt_remaining[i] = ps[i].bt;
         }
     }
     else if (choice == 2)
@@ -168,69 +170,69 @@ void SRTF_handler()
             bt_remaining[i] = ps[i].bt;
             i++;
         }
+    }
 
-        while (completed != pnum)
+    while (completed != pnum)
+    {
+        // find process with min. burst time in ready queue at current time
+        int min_index = -1;
+        int minimum = INT_MAX;
+        for (int i = 0; i < pnum; i++)
         {
-            // find process with min. burst time in ready queue at current time
-            int min_index = -1;
-            int minimum = INT_MAX;
-            for (int i = 0; i < pnum; i++)
+            if (ps[i].at <= current_time && is_completed[i] == false)
             {
-                if (ps[i].at <= current_time && is_completed[i] == false)
+                if (bt_remaining[i] < minimum)
                 {
-                    if (bt_remaining[i] < minimum)
+                    minimum = bt_remaining[i];
+                    min_index = i;
+                }
+                if (bt_remaining[i] == minimum)
+                {
+                    if (ps[i].at < ps[min_index].at)
                     {
                         minimum = bt_remaining[i];
                         min_index = i;
                     }
-                    if (bt_remaining[i] == minimum)
-                    {
-                        if (ps[i].at < ps[min_index].at)
-                        {
-                            minimum = bt_remaining[i];
-                            min_index = i;
-                        }
-                    }
-                }
-            }
-
-            if (min_index == -1)
-            {
-                current_time++;
-            }
-            else
-            {
-                if (bt_remaining[min_index] == ps[min_index].bt)
-                {
-                    ps[min_index].start_time = current_time;
-                    is_first_process = false;
-                }
-                bt_remaining[min_index] -= 1;
-                current_time++;
-                prev = current_time;
-                if (bt_remaining[min_index] == 0)
-                {
-                    ps[min_index]
-                        .ct = current_time;
-                    ps[min_index].tat = ps[min_index].ct - ps[min_index].at;
-                    ps[min_index].wt = ps[min_index].tat - ps[min_index].bt;
-
-                    sum_tat += ps[min_index].tat;
-                    sum_wt += ps[min_index].wt;
-                    completed++;
-                    is_completed[min_index] = true;
                 }
             }
         }
-        // Output the result to the console
-        printf("-------------------------------------------------------");
-        printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
-        for (int i = 0; i < pnum; i++)
-            printf("%d\t\t%d\t%d\t\t%d\t%d\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
 
-        printf("\nAverage Turn Around time= %f ", (float)sum_tat / pnum);
-        printf("\nAverage Waiting Time= %f ", (float)sum_wt / pnum);
+        if (min_index == -1)
+        {
+            current_time++;
+        }
+        else
+        {
+            if (bt_remaining[min_index] == ps[min_index].bt)
+            {
+                ps[min_index].start_time = current_time;
+                is_first_process = false;
+            }
+            bt_remaining[min_index] -= 1;
+            current_time++;
+            prev = current_time;
+            if (bt_remaining[min_index] == 0)
+            {
+                ps[min_index]
+                    .ct = current_time;
+                ps[min_index].tat = ps[min_index].ct - ps[min_index].at;
+                ps[min_index].wt = ps[min_index].tat - ps[min_index].bt;
+
+                sum_tat += ps[min_index].tat;
+                sum_wt += ps[min_index].wt;
+                completed++;
+                is_completed[min_index] = true;
+            }
+        }
     }
+    // Output the result to the console
+    printf("-------------------------------------------------------");
+    printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
+    for (int i = 0; i < pnum; i++)
+        printf("%d\t\t%d\t%d\t\t%d\t%d\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
+
+    printf("\nAverage Turn Around time= %f ", (float)sum_tat / pnum);
+    printf("\nAverage Waiting Time= %f ", (float)sum_wt / pnum);
 }
 
 int main(int argc, char *argv[])
