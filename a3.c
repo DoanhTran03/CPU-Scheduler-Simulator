@@ -1,3 +1,10 @@
+/*
+Student Name: Ngoc Doanh Tran
+Student ID: 110092702
+Homework Number: Assignment 3
+Date: 2/26/2024
+Class: COMP 3300
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -112,9 +119,9 @@ void FIFO_handler()
 
     // Print out the result on console.
     printf("\n------------------------------------------------------");
-    printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
+    printf("\nProcess_No.\tArrival_Time\tCPU_Burst_Time\tCompletion_Time\tTurn_Around_Time\tWait_Time\n");
     for (int i = 0; i < pnum; i++)
-        printf("%d\t\t%d\t%d\t\t%d\t%d\t%d\t\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
+        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
 
     printf("\nAverage Turn Around time= %f ", (float)(sum_tat / pnum));
     printf("\nAverage Waiting Time= %f ", (float)(sum_wt / pnum));
@@ -233,9 +240,9 @@ void SRTF_handler()
     }
     // Output the result to the console
     printf("-------------------------------------------------------");
-    printf("\nProcess No.\tAT\tCPU Burst Time\tCT\tTAT\tWT\n");
+    printf("\nProcess No.\tArrival_Time\tCPU_Burst_Time\tCompletion_Time\tTurn_Around_Time\tWait_Time\n");
     for (int i = 0; i < pnum; i++)
-        printf("%d\t\t%d\t%d\t\t%d\t%d\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
+        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t\t%d\n", ps[i].pid, ps[i].at, ps[i].bt, ps[i].ct, ps[i].tat, ps[i].wt);
 
     printf("\nAverage Turn Around time= %f ", (float)sum_tat / pnum);
     printf("\nAverage Waiting Time= %f ", (float)sum_wt / pnum);
@@ -373,72 +380,17 @@ void RR_handler()
     qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorPID);
 
     // Output
-    printf("\nProcess No.\tAT\tCPU Burst Time\tStart Time\tCT\tTAT\tWT\n");
+    printf("\nProcess_No.\tArrival_Time\tCPU_Burst_Time\tStart_Time\tCompletion_Time\tTurn_Around_Time\tWait_Time\n");
     for (int i = 0; i < pnum; i++)
-        printf("%d\t\t%d\t%d\t\t%d\t\t%d\t%d\t%d\n", i, ps[i].at, ps[i].bt, ps[i].start_time, ps[i].ct, ps[i].tat, ps[i].wt);
+        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t\t%d\n", i, ps[i].at, ps[i].bt, ps[i].start_time, ps[i].ct, ps[i].tat, ps[i].wt);
     printf("\nAverage Turn Around time= %.2f", (float)(sum_tat / pnum));
     printf("\nAverage Waiting Time= %.2f", (float)(sum_wt / pnum));
-}
-
-int min(int a, int b)
-{
-    if (a > b)
-    {
-        return b;
-    }
-    return a;
-}
-
-int max(int a, int b)
-{
-    if (a > b)
-    {
-        return a;
-    }
-    return b;
-}
-
-void get_wt_time(int wt[], int pnum)
-{
-    // declaring service array that stores cumulative burst time
-    int service[50];
-
-    // Initialising initial elements of the arrays
-    service[0] = ps[0].at;
-    wt[0] = 0;
-
-    for (int i = 1; i < pnum; i++)
-    {
-        service[i] = ps[i - 1].bt + service[i - 1];
-
-        wt[i] = service[i] - ps[i].at;
-
-        // If waiting time is negative, change it into zero
-
-        if (wt[i] < 0)
-        {
-            wt[i] = 0;
-        }
-    }
-}
-
-void get_tat_time(int tat[], int wt[], int n)
-{
-    // Filling turnaroundtime array
-
-    for (int i = 0; i < n; i++)
-    {
-        tat[i] = ps[i].bt + wt[i];
-    }
 }
 
 void PS_handler()
 {
     int choice;
-    int pnum;
-    int bt_remaining[100] = {0};
-    float sum_tat = 0, sum_wt = 0;
-
+    int pnum, index;
     printf("\n-----------------------------------------------------\nPlease chosose your type of input:\n1/Manually input\n2/File input\n");
     scanf("%d", &choice);
     if (choice == 1)
@@ -446,6 +398,7 @@ void PS_handler()
         //--------------------------Ask user manually type in the information---------------------------------
         printf("Please enter the number of process\n");
         scanf("%d", &pnum);
+
         for (int i = 0; i < pnum; i++)
         {
             ps[i].pid = i;
@@ -453,14 +406,15 @@ void PS_handler()
             scanf("%d", &ps[i].at);
             printf("Please enter bursttime for process #%d\n", i);
             scanf("%d", &ps[i].bt);
-            printf("Please enter priority for process #%d\n", i);
+            printf("Please enter the priority for the process #%d\n", i);
             scanf("%d", &ps[i].priority);
+            ps[i].bt_remaining = ps[i].bt;
         }
     }
     else if (choice == 2)
     {
         //-------------------------Ask input by file type-------------------------
-        int array[500], i = 0, arrayLength;
+        int array[500], k = 0;
         char filename[30];
 
         printf("\n-----------------------------------------------------\nPlease enter the file name:\n");
@@ -469,58 +423,91 @@ void PS_handler()
 
         fp = fopen(filename, "r");
 
-        while (fscanf(fp, "%d", &array[i]) != EOF)
+        while (fscanf(fp, "%d", &array[k]) != EOF)
         {
-            i++;
+            k++;
         }
         fclose(fp);
-        pnum = i / 3;
-
-        i = 0;
-        for (int j = 0; j < pnum * 2; j = j + 3)
+        pnum = k / 3;
+        k = 0;
+        for (int j = 0; j < pnum * 3; j = j + 3)
         {
-            ps[i].pid = i;
-            ps[i].at = array[j];
-            ps[i].bt = array[j + 1];
-            ps[i].priority = array[j + 2];
-            i++;
+            ps[k].pid = k;
+            ps[k].at = array[j];
+            ps[k].bt = array[j + 1];
+            ps[k].priority = array[j + 2];
+            ps[k].bt_remaining = ps[k].bt;
+            k++;
         }
     }
 
-    // Calculate for completion time, turn around and waiting time
-    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorAT);
-
-    int wt[50], tat[50];
-
-    double wavg = 0, tavg = 0;
-    get_wt_time(wt, pnum);
-    get_tat_time(tat, wt, pnum);
-    int stime[50], ctime[50];
-
-    stime[0] = ps[0].at;
-    ctime[0] = stime[0] + tat[0];
-
-    // calculating starting and ending time
-    for (int i = 1; i < pnum; i++)
+    struct process_struct temp;
+    int i, j;
+    int wt[pnum];
+    int ta[pnum];
+    int ct[pnum];
+    int total_wt = 0;
+    int total_ta = 0;
+    bool completed[pnum];
+    int current_time = 0;
+    int pio_index = 0;
+    printf("\nProcess_number\tCompletion_Time\tTurnaround_Time\tWaiting Time\n");
+    for (i = 0; i < pnum; i++)
     {
-        stime[i] = (i == 0) ? ps[i].at : findmax(ps[i].at, ps[i - 1].ct);
-        ctime[i] = stime[i] + tat[i] - wt[i];
+        wt[i] = 0;
     }
 
-    printf("Process_no\tStart_time\tComplete_time\tTurn_Around_Time\tWaiting_Time");
-    for (int i = 0; i < pnum; i++)
+    while (true)
     {
-        wavg += wt[i];
-        tavg += tat[i];
-
-        printf("\n%d\t\t%d\t\t%d\t\t%d\t\t\t%d", ps[i].pid, stime[i], ctime[i], tat[i], wt[i]);
+        bool completed_all = true;
+        pio_index = 0;
+        for (i = 0; i < pnum; i++)
+        {
+            if (!completed[i])
+            {
+                completed_all = false;
+                if (ps[i].priority != 100 && ps[i].at <= current_time && ps[i].priority <= ps[pio_index].priority)
+                {
+                    pio_index = i;
+                }
+            }
+        }
+        for (i = 0; i < pnum; i++)
+        {
+            if (ps[i].at <= current_time && i != pio_index && ps[i].bt_remaining != 0)
+            {
+                wt[i] += 1;
+            }
+        }
+        if (completed_all)
+        {
+            break;
+        }
+        ps[pio_index].bt_remaining--;
+        if (ps[pio_index].bt_remaining == 0)
+        {
+            completed[pio_index] = true;
+            ps[pio_index].priority = 100;
+            // break;
+        }
+        current_time++;
     }
+    for (i = 0; i < pnum; i++)
+    {
+        ta[i] = wt[i] + ps[i].bt;
+        ct[i] = ta[i] + ps[i].at;
+        total_ta += ta[i];
+        total_wt += wt[i];
+        printf("%d\t\t%d\t\t%d\t\t%d\n", ps[i].pid, ct[i], ta[i], wt[i]);
+    }
+    printf("\nAverage Turnaround Time: %.2f", (double)total_ta / pnum);
+    printf("\nAverage Waiting Time: %.2f\n\n", (double)total_wt / pnum);
 }
 
 int main(int argc, char *argv[])
 {
     int cpuTypeCode;
-    printf("\n-----------------------------------------------------------------------------------\nPlease enter your type of CPU scheduling (Enter the corresponding number to console, Ex: 1 or 2 or 3, ....):\n1/ First-In-First_Out(FIFO)\n2/ Shortest Remaining Time First (SRTF)\n3/ Round Robin (RR)\n4/ Priority Scheduling\n");
+    printf("\n-----------------------------------------------------------------------------------\nPlease enter your type of CPU scheduling (Enter the corresponding number to console, Ex: 1 or 2 or 3, ....):\n1/ First-In-First_Out(FIFO)\n2/ Shortest Remaining Time First (SRTF)\n3/ Round Robin (RR)\n4/ Priority Scheduling\n5/ Multilevel Feedback Queue\n");
     scanf("%d", &cpuTypeCode);
     switch (cpuTypeCode)
     {
@@ -536,7 +523,11 @@ int main(int argc, char *argv[])
     case 4: // Priority Scheduling
         PS_handler();
         break;
+    case 5: // Multilevel Queue Scheduling
+        printf("This is multi queue schedule");
+        break;
     default:
         printf("Please enter the valid format");
+        exit(1);
     }
 }
