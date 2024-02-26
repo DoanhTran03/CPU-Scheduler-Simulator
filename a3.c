@@ -23,6 +23,7 @@ struct process_struct
     int bt_remaining;
     int priority;
     int temp;
+    int lv;
 } ps[100];
 
 int findmax(int a, int b)
@@ -504,6 +505,153 @@ void PS_handler()
     printf("\nAverage Waiting Time: %.2f\n\n", (double)total_wt / pnum);
 }
 
+void MFQ_handler()
+{
+    int choice;
+    int pnum, index;
+    printf("\n-----------------------------------------------------\nPlease chosose your type of input:\n1/Manually input\n2/File input\n");
+    scanf("%d", &choice);
+    if (choice == 1)
+    {
+        //--------------------------Ask user manually type in the information---------------------------------
+        printf("Please enter the number of process\n");
+        scanf("%d", &pnum);
+
+        for (int i = 0; i < pnum; i++)
+        {
+            ps[i].pid = i;
+            printf("Please enter arrival time for proccess #%d\n", i);
+            scanf("%d", &ps[i].at);
+            printf("Please enter bursttime for process #%d\n", i);
+            scanf("%d", &ps[i].bt);
+            ps[i].bt_remaining = ps[i].bt;
+        }
+    }
+    else if (choice == 2)
+    {
+        //-------------------------Ask input by file type-------------------------
+        int array[500], k = 0;
+        char filename[30];
+
+        printf("\n-----------------------------------------------------\nPlease enter the file name:\n");
+        scanf("%s", filename);
+        FILE *fp;
+
+        fp = fopen(filename, "r");
+
+        while (fscanf(fp, "%d", &array[k]) != EOF)
+        {
+            k++;
+        }
+        fclose(fp);
+        pnum = k / 2;
+        k = 0;
+        for (int j = 0; j < pnum * 3; j = j + 2)
+        {
+            ps[k].pid = k;
+            ps[k].at = array[j];
+            ps[k].bt = array[j + 1];
+            ps[k].bt_remaining = ps[k].bt;
+            k++;
+        }
+    }
+
+    bool completed[pnum];
+    int i, j, k;
+    struct process_struct temp;
+
+    int wt[pnum];
+    int ta[pnum];
+    int ct[pnum];
+    int total_wt = 0;
+    int total_ta = 0;
+    int current_time = 0;
+    int quantum;
+
+    for (i = 0; i < pnum; i++)
+    {
+        wt[i] = 0;
+        ps[i].lv = 1;
+    }
+    for (i = 1; i < pnum; i++)
+    {
+        temp = ps[i];
+        j = i - 1;
+        while (j >= 0 && ps[j].at > temp.at)
+        {
+            ps[j + 1] = ps[j];
+            j = j - 1;
+        }
+        ps[j + 1] = temp;
+    }
+    printf("\n| Process number | Process completion time | Process turnaround time | Process waiting time |\n");
+    printf("|----------------|-------------------------|-------------------------|----------------------|\n");
+    int iter = 0, check = -1, upto = -1, tem;
+    for (j = 0; j < 10; j++)
+    {
+        bool completed_all = true;
+        if (j == 9)
+        {
+            for (i = 0; i < pnum; i++)
+            {
+                if (!completed[i])
+                {
+                    completed_all = false;
+                    current_time += ps[i].bt_remaining;
+                    ps[i].bt_remaining = 0;
+                    completed[i] = true;
+                }
+            }
+        }
+        else
+        {
+            for (i = 0; i < pnum; i++)
+            {
+                quantum = 2 * ps[i].lv;
+                int minus = 0;
+                if (!completed[i])
+                {
+                    completed_all = false;
+                    for (k = 0; k < ps[i].lv; k++)
+                    {
+                        minus += k;
+                    }
+                    wt[i] = current_time - minus * 2 - ps[i].at;
+                    if (ps[i].bt_remaining > quantum)
+                    {
+                        current_time += quantum;
+                        ps[i].bt_remaining -= quantum;
+                    }
+                    else if (ps[i].bt_remaining != 0 && ps[i].at <= quantum)
+                    {
+                        completed[i] = true;
+                        current_time += ps[i].at;
+                        ps[i].at = 0;
+                    }
+                }
+                // printf("Process %d, time %d, rm %d\n", processes[i].pNum, current_time, processes[i].rTime);
+                ps[i].lv++;
+            }
+            iter++;
+        }
+        if (completed_all)
+        {
+            break;
+        }
+    }
+
+    for (int i = 0; i < pnum; i++)
+    {
+        ta[i] = wt[i] + ps[i].bt_remaining;
+        ct[i] = ta[i] + ps[i].at;
+        total_ta += ta[i];
+        total_wt += wt[i];
+        printf("| %14d | %23d | %23d | %20d |\n", ps[i].pid, ct[i], ta[i], wt[i]);
+    }
+    printf("\nAverage Turnaround Time: %.2f", (double)total_ta / pnum);
+    printf("\nAverage Waiting Time: %.2f\n\n", (double)total_wt / pnum);
+}
+
 int main(int argc, char *argv[])
 {
     int cpuTypeCode;
@@ -524,7 +672,7 @@ int main(int argc, char *argv[])
         PS_handler();
         break;
     case 5: // Multilevel Queue Scheduling
-        printf("This is multi queue schedule");
+        MFQ_handler();
         break;
     default:
         printf("Please enter the valid format");
