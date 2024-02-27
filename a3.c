@@ -9,7 +9,6 @@ Class: COMP 3300
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
-#include <conio.h>
 
 #define MIN -9999;
 
@@ -272,9 +271,9 @@ void RR_handler()
 
         for (int i = 0; i < pnum; i++)
         {
+            ps[i].pid = i;
             printf("Please enter arrival time for proccess #%d\n", i);
             scanf("%d", &ps[i].at);
-            ps[i].pid = i;
             printf("Please enter bursttime for process #%d\n", i);
             scanf("%d", &ps[i].bt);
             ps[i].bt_remaining = ps[i].bt;
@@ -546,7 +545,7 @@ void MFQ_handler()
         fclose(fp);
         pnum = k / 2;
         k = 0;
-        for (int j = 0; j < pnum * 3; j = j + 2)
+        for (int j = 0; j < pnum * 2; j = j + 2)
         {
             ps[k].pid = k;
             ps[k].at = array[j];
@@ -557,7 +556,7 @@ void MFQ_handler()
     }
 
     bool completed[pnum];
-    int i, j, k;
+    int i = 0, j = 0, k = 0;
     struct process_struct temp;
 
     int wt[pnum];
@@ -584,8 +583,7 @@ void MFQ_handler()
         }
         ps[j + 1] = temp;
     }
-    printf("\n| Process number | Process completion time | Process turnaround time | Process waiting time |\n");
-    printf("|----------------|-------------------------|-------------------------|----------------------|\n");
+    printf("\nProcess number\tCompletion_Time\tTurnaround_Time\tWaiting_Time\n");
     int iter = 0, check = -1, upto = -1, tem;
     for (j = 0; j < 10; j++)
     {
@@ -622,11 +620,11 @@ void MFQ_handler()
                         current_time += quantum;
                         ps[i].bt_remaining -= quantum;
                     }
-                    else if (ps[i].bt_remaining != 0 && ps[i].at <= quantum)
+                    else if (ps[i].bt_remaining != 0 && ps[i].bt_remaining <= quantum)
                     {
                         completed[i] = true;
-                        current_time += ps[i].at;
-                        ps[i].at = 0;
+                        current_time += ps[i].bt_remaining;
+                        ps[i].bt_remaining = 0;
                     }
                 }
                 // printf("Process %d, time %d, rm %d\n", processes[i].pNum, current_time, processes[i].rTime);
@@ -640,13 +638,13 @@ void MFQ_handler()
         }
     }
 
-    for (int i = 0; i < pnum; i++)
+    for (i = 0; i < pnum; i++)
     {
-        ta[i] = wt[i] + ps[i].bt_remaining;
+        ta[i] = wt[i] + ps[i].bt;
         ct[i] = ta[i] + ps[i].at;
         total_ta += ta[i];
         total_wt += wt[i];
-        printf("| %14d | %23d | %23d | %20d |\n", ps[i].pid, ct[i], ta[i], wt[i]);
+        printf("%d\t\t%d\t\t%d\t\t%d\n", ps[i].pid, ct[i], ta[i], wt[i]);
     }
     printf("\nAverage Turnaround Time: %.2f", (double)total_ta / pnum);
     printf("\nAverage Waiting Time: %.2f\n\n", (double)total_wt / pnum);
