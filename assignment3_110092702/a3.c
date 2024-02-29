@@ -9,6 +9,7 @@ Class: COMP 3300
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <string.h>
 
 #define MIN -9999;
 
@@ -24,6 +25,54 @@ struct process_struct
     int temp;
     int lv;
 } ps[100];
+
+void swap(void *v1, void *v2, int size)
+{
+    // buffer is array of characters which will
+    // store element byte by byte
+    char buffer[size];
+
+    // memcpy will copy the contents from starting
+    // address of v1 to length of size in buffer
+    // byte by byte.
+    memcpy(buffer, v1, size);
+    memcpy(v1, v2, size);
+    memcpy(v2, buffer, size);
+}
+
+void _qsort(void *v, int size, int left, int right,
+            int (*comp)(void *, void *))
+{
+    void *vt, *v3;
+    int i, last, mid = (left + right) / 2;
+    if (left >= right)
+        return;
+
+    // casting void* to char* so that operations
+    // can be done.
+    void *vl = (char *)(v + (left * size));
+    void *vr = (char *)(v + (mid * size));
+    swap(vl, vr, size);
+    last = left;
+    for (i = left + 1; i <= right; i++)
+    {
+
+        // vl and vt will have the starting address
+        // of the elements which will be passed to
+        // comp function.
+        vt = (char *)(v + (i * size));
+        if ((*comp)(vl, vt) > 0)
+        {
+            ++last;
+            v3 = (char *)(v + (last * size));
+            swap(vt, v3, size);
+        }
+    }
+    v3 = (char *)(v + (last * size));
+    swap(vl, v3, size);
+    _qsort(v, size, left, last - 1, comp);
+    _qsort(v, size, last + 1, right, comp);
+}
 
 int findmax(int a, int b)
 {
@@ -101,7 +150,7 @@ void FIFO_handler()
         }
     }
 
-    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorAT);
+    _qsort((void *)ps, sizeof(struct process_struct), 0, pnum - 1, (int (*)(void *, void *))(comparatorAT));
 
     for (int i = 0; i < pnum; i++)
     {
@@ -115,7 +164,7 @@ void FIFO_handler()
     }
 
     // sort so that process ID in output comes in Original order (just for interactivity)
-    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorPID);
+    _qsort((void *)ps, sizeof(struct process_struct), 0, pnum - 1, (int (*)(void *, void *))(comparatorPID));
 
     // Print out the result on console.
     printf("\n------------------------------------------------------");
@@ -310,8 +359,7 @@ void RR_handler()
     }
 
     // sort structure on the basis of Arrival time in increasing order
-    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorAT);
-    // q.push(0);
+    _qsort((void *)ps, sizeof(struct process_struct), 0, pnum - 1, (int (*)(void *, void *))(comparatorAT));
     front = rear = 0;
     queue[rear] = 0;
     visited[0] = true;
@@ -377,7 +425,7 @@ void RR_handler()
     } // end of while
 
     // sort so that process ID in output comes in Original order (just for interactivity- Not needed otherwise)
-    qsort((void *)ps, pnum, sizeof(struct process_struct), comparatorPID);
+    _qsort((void *)ps, sizeof(struct process_struct), 0, pnum - 1, (int (*)(void *, void *))(comparatorPID));
 
     // Output
     printf("\nProcess_No.\tArrival_Time\tCPU_Burst_Time\tStart_Time\tCompletion_Time\tTurn_Around_Time\tWait_Time\n");
