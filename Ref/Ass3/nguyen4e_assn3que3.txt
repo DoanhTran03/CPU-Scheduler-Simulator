@@ -1,94 +1,0 @@
-Script started on 2023-11-20 18:39:32-05:00 [TERM="xterm" TTY="/dev/pts/37" COLUMNS="80" LINES="26"]
-[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ sqlplus nguyen4e
-[?2004l
-SQL*Plus: Release 12.1.0.2.0 Production on Mon Nov 20 18:39:41 2023
-
-Copyright (c) 1982, 2014, Oracle.  All rights reserved.
-
-Enter password: [KEnter password: [K[?2004h[KEnter password: [17G[17G[KEnter password: *[18G[18G[KEnter password: **[19G[19G[KEnter password: ***[20G[20G[KEnter password: ****[21G[21G[KEnter password: *****[22G[22G[KEnter password: ******[23G[23G[KEnter password: *******[24G[24G[KEnter password: ********[25G[25G[KEnter password: *********[26G[26G[KEnter password: **********[27G[27G[KEnter password: ***********[28G[28G[KEnter password: ************[29G[29G[KEnter password: *************[30G[30G[KEnter password: **************[31G[31G[KEnter password: *************[30G[30G[KEnter password: ************[29G[29G[KEnter password: ***********[28G[28G[KEnter password: **********[27G[27G[KEnter password: *********[26G[26G[KEnter password: ********[25G[25G[KEnter password: *******[24G[24G[KEnter password: ******[23G[23G[KEnter password: *****[22G[22G[KEnter password: ****[21G[21G[KEnter password: ***[20G[20G[KEnter password: **[19G[19G[KEnter password: *[18G[18G[KEnter password: [17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[17G[KEnter password: *[18G[18G[KEnter password: **[19G[19G[KEnter password: ***[20G[20G[KEnter password: ****[21G[21G[KEnter password: *****[22G[22G[KEnter password: ******[23G[23G[KEnter password: *******[24G[24G[KEnter password: ********[25G[25G[KEnter password: *********[26G[26G[KEnter password: **********[27G[27G[KEnter password: ***********[28G[28G[KEnter password: ************[29G[29G[KEnter password: *************[30G[30G[KEnter password: **************[31G[31G[KEnter password: ***************[32G[32G[32G[17G[?2004l[KEnter password: [17G
-[K
-Connected to:
-Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
-With the Partitioning, OLAP, Data Mining and Real Application Testing options
-
-SQL> [KSQL> [K[?2004hSQL> INSERT INTO GROWSCROPS (Ssn, Regionid, crop, Revenue)[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C VALUES (10, 1, 'brocoli', NULL)[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
-[C[C[C[C[C[C[C[C[C[C;[A[?2004l[K
-[K[A[C[C[C[C[CINSERT INTO GROWSCROPS (Ssn, Regionid, crop, Revenue) VALUES (10, 1, 'brocoli', NULL);
-
-1 row created.
-
-SQL> [KSQL> [K[?2004hSQL> select * from GRW[KW[KOWSCROPS;[C[C[C[C[C[?2004l[Kselect * from GROWSCROPS;
-
-       SSN   REGIONID CROP		 REVENUE
----------- ---------- --------------- ----------
-	10	    1 brocoli
-	10	    1 corn		     2.5
-	10	    1 carrots		       4
-	20	    1 potatoes		       9
-	30	    2 potatoes		      11
-	40	    3 peas		    15.3
-	50	    4 potatoes		    10.3
-	50	    3 peas		      14
-
-8 rows selected.
-
-SQL> [KSQL> [K[?2004hSQL> UPDATE Region[C[C[C[C[C[?2004l[K[K[?2004hSET Cropbudget = 20[?2004l[KUPDATE Region
-  2  [K[?2004h  2  WHERE Regname = 'SWO';[C[C[C[C[C[K[?2004l[K  2  SET Cropbudget = 20
-  3  [K[?2004h  3  WHERE Regname = 'SWO';[C[C[C[C[C[?2004l[KWHERE Regname = 'SWO';
-
-1 row updated.
-
-SQL> [KSQL> [K[?2004hSQL> WHERE Regname = 'SWO';[C[C[C[C[C[3PSET Cropbudget = 20[C[C[C[C[C[6PUPDATE Region[C[C[C[C[Cselect * from GROWSCROPS;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;R;e;g;i;o;n;[C[C[C[C[C[?2004l[Kselect * from Region;
-
-  REGIONID REGNAME	   CROPBUDGET  MANAGERID
----------- --------------- ---------- ----------
-	 1 SWO			   20	      10
-	 2 EO			    4	      10
-	 3 SC			    9	      50
-	 4 SEO			    6	      50
-
-SQL> [KSQL> [K[?2004hSQL> INSERT INTO FARMER (Ssn, Name, Age, Regionid)[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C VALUES (60, 'Mary Tama', 21, 2)[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
-[C[C;[A[C[C[?2004l[K
-[K[A[C[C[C[C[CINSERT INTO FARMER (Ssn, Name, Age, Regionid) VALUES (60, 'Mary Tama', 21, 2);
-
-1 row created.
-
-SQL> [KSQL> [K[?2004hSQL> INSERT INTO FARMER (Ssn, Name, Age, Regionid) VALUES (60, 'Mary Tama', 21, 2);[A[C[Cselect * from Region;[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P;[1P;[1P;[1P;[1P;[1P;F;a;r;m;e;r;[C[C[C[C[C[?2004l[Kselect * from Farmer;
-
-       SSN NAME 		  AGE	REGIONID
----------- --------------- ---------- ----------
-	60 Mary Tama		   21	       2
-	10 Jobe Bata		   65	       1
-	20 Monica Kap		   80	       1
-	30 Peter Good		   22	       2
-	40 Kate Lee		   47	       3
-	50 Ted Tam		   50	       4
-
-6 rows selected.
-
-SQL> [KSQL> [K[?2004hSQL> DELETE FROM GROWSCROPS WHERE Ssn = 20;[C[C[C[C[C[?2004l[KDELETE FROM GROWSCROPS WHERE Ssn = 20;
-
-1 row deleted.
-
-SQL> [KSQL> [K[?2004hSQL> DELETE FROM GROWSCROPS WHERE Ssn = 20;[C[C[C[C[C[17Pselect * from Farmer;[1P;[1P;[1P;[1P;[1P;[1P;G;R;O;W;S;C;R;O;P;S;[C[C[C[C[C[C[?2004l[Kselect * from GROWSCROPS;
-
-       SSN   REGIONID CROP		 REVENUE
----------- ---------- --------------- ----------
-	10	    1 brocoli
-	10	    1 corn		     2.5
-	10	    1 carrots		       4
-	30	    2 potatoes		      11
-	40	    3 peas		    15.3
-	50	    4 potatoes		    10.3
-	50	    3 peas		      14
-
-7 rows selected.
-
-SQL> [KSQL> [K[?2004hSQL> exit[?2004l[Kexit
-Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
-With the Partitioning, OLAP, Data Mining and Real Application Testing options
-[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ exit
-[?2004lexit
-
-Script done on 2023-11-20 18:41:54-05:00 [COMMAND_EXIT_CODE="0"]

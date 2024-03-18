@@ -1,64 +1,0 @@
-Script started on 2023-11-20 19:05:13-05:00 [TERM="xterm" TTY="/dev/pts/37" COLUMNS="80" LINES="26"]
-[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ sqlplush[K nguyen4e
-[?2004l
-SQL*Plus: Release 12.1.0.2.0 Production on Mon Nov 20 19:05:24 2023
-
-Copyright (c) 1982, 2014, Oracle.  All rights reserved.
-
-Enter password: [KEnter password: [K[?2004h[KEnter password: [17G[17G[KEnter password: *[18G[18G[KEnter password: **[19G[19G[KEnter password: ***[20G[20G[KEnter password: ****[21G[21G[KEnter password: *****[22G[22G[KEnter password: ******[23G[23G[KEnter password: *******[24G[24G[KEnter password: ********[25G[25G[KEnter password: *********[26G[26G[KEnter password: **********[27G[27G[KEnter password: ***********[28G[28G[KEnter password: ************[29G[29G[KEnter password: *************[30G[30G[KEnter password: **************[31G[31G[KEnter password: ***************[32G[32G[32G[17G[?2004l[KEnter password: [17G
-[K
-Connected to:
-Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
-With the Partitioning, OLAP, Data Mining and Real Application Testing options
-
-SQL> [KSQL> [K[?2004hSQL> SELECT DISTINCT G1.crop, G1.Regionid[C[C[C[C[C[?2004l[K[K[?2004hFROM Growscrops G1[?2004l[KSELECT DISTINCT G1.crop, G1.Regionid
-  2  [K[?2004h  2  WHERE EXISTS ([C[C[C[C[C[?2004l[KFROM Growscrops G1
-  3  [K[?2004h  3      SELECT *[C[C[C[C[C[?2004l[KWHERE EXISTS (
-  4  [K[?2004h  4      FROM Growscrops G2[C[C[C[C[C[?2004l[K    SELECT *
-  5  [K[?2004h  5      WHERE G1.crop = G2.crop[C[C[C[C[C[?2004l[K    FROM Growscrops G2
-  6  [K[?2004h  6      AND G1.Regionid != G2.Regionid[C[C[C[C[C[?2004l[K    WHERE G1.crop = G2.crop
-  7  [K[?2004h  7  )[K[?2004l[K  7      AND G1.Regionid != G2.Regionid
-  8  [K[?2004h  8  );[?2004l[K);
-
-CROP		  REGIONID
---------------- ----------
-potatoes		 4
-potatoes		 2
-
-SQL> [KSQL> [K[?2004hSQL> SELECT DISTINCT G1.crop, G1.Regionid[C[C[C[C[C[?2004l[K[K[?2004hFROM Growscrops G1[?2004l[KSELECT DISTINCT G1.crop, G1.Regionid
-  2  [K[?2004h  2  WHERE NOT EXISTS ([C[C[C[C[C[?2004l[KFROM Growscrops G1
-  3  [K[?2004h  3      SELECT *[C[C[C[C[C[?2004l[KWHERE NOT EXISTS (
-  4  [K[?2004h  4      FROM Growscrops G2[C[C[C[C[C[?2004l[K    SELECT *
-  5  [K[?2004h  5      WHERE G1.crop = G2.crop[C[C[C[C[C[?2004l[K    FROM Growscrops G2
-  6  [K[?2004h  6      AND G1.Regionid != G2.Regionid[C[C[C[C[C[?2004l[K    WHERE G1.crop = G2.crop
-  7  [K[?2004h  7  )[K[?2004l[K  7      AND G1.Regionid != G2.Regionid
-  8  [K[?2004h  8  );[?2004l[K);
-
-CROP		  REGIONID
---------------- ----------
-corn			 1
-carrots 		 1
-brocoli 		 1
-peas			 3
-
-SQL> [KSQL> [K[?2004hSQL> select * from GROWSCROPS;[C[C[C[C[C[?2004l[Kselect * from GROWSCROPS;
-
-       SSN   REGIONID CROP		 REVENUE
----------- ---------- --------------- ----------
-	10	    1 brocoli
-	10	    1 corn		     2.5
-	10	    1 carrots		       4
-	30	    2 potatoes		      11
-	40	    3 peas		    15.3
-	50	    4 potatoes		    10.3
-	50	    3 peas		      14
-
-7 rows selected.
-
-SQL> [KSQL> [K[?2004hSQL> exit[?2004l[Kexit
-Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
-With the Partitioning, OLAP, Data Mining and Real Application Testing options
-[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ exit
-[?2004lexit
-
-Script done on 2023-11-20 19:06:09-05:00 [COMMAND_EXIT_CODE="0"]

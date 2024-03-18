@@ -1,177 +1,0 @@
-Script started on 2023-11-17 12:44:50-05:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="80" LINES="24"]
-[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ sqlplus nguyen4e
-[?2004l
-SQL*Plus: Release 12.1.0.2.0 Production on Fri Nov 17 12:45:00 2023
-
-Copyright (c) 1982, 2014, Oracle.  All rights reserved.
-
-Enter password: [KEnter password: [K[?2004h[KEnter password: [17G[17G[KEnter password: *[18G[18G[KEnter password: **[19G[19G[KEnter password: ***[20G[20G[KEnter password: ****[21G[21G[KEnter password: *****[22G[22G[KEnter password: ******[23G[23G[KEnter password: *******[24G[24G[KEnter password: ********[25G[25G[KEnter password: *********[26G[26G[KEnter password: **********[27G[27G[KEnter password: ***********[28G[28G[KEnter password: ************[29G[29G[KEnter password: *************[30G[30G[KEnter password: **************[31G[31G[KEnter password: ***************[32G[32G[32G[17G[?2004l[KEnter password: [17G
-[K
-Connected to:
-Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
-With the Partitioning, OLAP, Data Mining and Real Application Testing options
-
-SQL> [KSQL> [K[?2004hSQL> exit;[Kselect*from cat[C[C[C[C[Cpurge table "BIN$Cl0fzxI4kw/gYM+Js0wVaA==$0";8kw/gYM+Js0wVaA==$0";pkw/gYM+Js0wVaA==$0";tkw/gYM+Js0wVaA==$0";ykw/gYM+Js0wVaA==$0";J+kw/gYM+Js0wVaA==$0";1kw/gYM+Js0wVaA==$0";6kw/gYM+Js0wVaA==$0";Bkw/gYM+Js0wVaA==$0";Fkw/gYM+Js0wVaA==$0";Lkw/gYM+Js0wVaA==$0";Pkw/gYM+Js0wVaA==$0";Ukw/gYM+Js0wVaA==$0";Ykw/gYM+Js0wVaA==$0";ekw/gYM+Js0wVaA==$0";ikw/gYM+Js0wVaA==$0";mkw/gYM+Js0wVaA==$0";rkw/gYM+Js0wVaA==$0";xkw/gYM+Js0wVaA==$0";[C[C[C[C[C;[Kpurge table "BIN$Cl0fzxI4kw/gYM+Js0wVaA==$0"8kw/gYM+Js0wVaA==$0"pkw/gYM+Js0wVaA==$0"tkw/gYM+Js0wVaA==$0"ykw/gYM+Js0wVaA==$0"J+kw/gYM+Js0wVaA==$0"1kw/gYM+Js0wVaA==$0"6kw/gYM+Js0wVaA==$0"Bkw/gYM+Js0wVaA==$0"Fkw/gYM+Js0wVaA==$0"Lkw/gYM+Js0wVaA==$0"Pkw/gYM+Js0wVaA==$0"Ukw/gYM+Js0wVaA==$0"Ykw/gYM+Js0wVaA==$0"ekw/gYM+Js0wVaA==$0"ikw/gYM+Js0wVaA==$0"mkw/gYM+Js0wVaA==$0"rkw/gYM+Js0wVaA==$0"xkw/gYM+Js0wVaA==$0"[C[C[C[C[C[26Pselect * from cat;[C[C[C[C[C[1Ppurge recyclebin;[C[C[C[C[C;[Kselect * from cat[C[C[C[C[C@nguyen4e_farmerdroptable.sql[5Pata.sqlschema.sql[C[C[C[C[C[?2004l[K@nguyen4e_farmerschema.sql
-
-Table created.
-
-
-Table created.
-
-
-Table created.
-
-
-Table created.
-
-SQL> [KSQL> [K[?2004hSQL> @nguyen4e_farmerschema.sql[1P.sql[1P.sql[1P.sql[1P.sql[1P.sql[1P.sqlf.sqla.sqlr.sql[1P.sql[1P.sql[1P.sqld.sqla.sqlt.sqla.sql[C[C[C[C[C[?2004l[K@nguyen4e_farmerdata.sql
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-
-1 row created.
-
-SQL> [KSQL> [K[?2004hSQL> select * from cat[C[C[C[C[C[?2004l[Kselect * from cat
-  2  [K  2  [K[?2004h  2  ;[?2004l[K;
-
-TABLE_NAME		       TABLE_TYPE
------------------------------- -----------
-REGION			       TABLE
-RCONTACT		       TABLE
-GROWSCROPS		       TABLE
-FARMER			       TABLE
-
-SQL> [KSQL> [K[?2004hSQL> ;select * from cat[K[K[KRegion;[C[C[C[C[C[?2004l[Kselect * from Region;
-
-  REGIONID REGNAME	   CROPBUDGET  MANAGERID
----------- --------------- ---------- ----------
-	 1 SWO			    5	      10
-	 2 EO			    4	      10
-	 3 SC			    9	      50
-	 4 SEO			    6	      50
-
-SQL> [KSQL> [K[?2004hSQL> select * from Region;[1P;[1P;[1P;[1P;[1P;[1P;R;c;o;n;c;[1P;t;a;c;t;[C[C[C[C[C[?2004l[Kselect * from Rcontact;
-
-  REGIONID FULLNAME		     RPHONE
----------- ------------------------- ---------------
-	 1 Southwest Ontario
-	 2 Eastern Ontario	     1(733)524-0100
-	 3 Southcentral Ontario      1(866)663 3161
-	 4 Southeastern Ontario      1(877)633-2000
-
-SQL> [KSQL> [K[?2004hSQL> select * from Rcontact;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;G;r;o;w;s;c;r;o;p;s;[C[C[C[C[C[?2004l[Kselect * from Growscrops;
-
-       SSN   REGIONID CROP		 REVENUE
----------- ---------- --------------- ----------
-	10	    1 corn		     2.5
-	10	    1 carrots		       4
-	20	    1 potatoes		       9
-	30	    2 potatoes		      11
-	40	    3 peas		    15.3
-	50	    4 potatoes		    10.3
-	50	    3 peas		      14
-
-7 rows selected.
-
-SQL> [KSQL> [K[?2004hSQL> select * from Growscrops;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;[1P;f;a;r;m;e;r;[C[C[C[C[C[?2004l[Kselect * from farmer;
-
-       SSN NAME 		  AGE	REGIONID
----------- --------------- ---------- ----------
-	10 Jobe Bata		   65	       1
-	20 Monica Kap		   80	       1
-	30 Peter Good		   22	       2
-	40 Kate Lee		   47	       3
-	50 Ted Tam		   50	       4
-
-SQL> [KSQL> [K[?2004hSQL> select * from farmer;Growscrops;[2PRcontact;[2Pegion;[C[C[C[C[C;[Kselect * from cat[C[C[C[C[C@nguyen4e_farmerdata.sqlschema.sql[2Pdata.sql[C[C[C[C[C[7Pselect * from cat[C[C[C[C[C@nguyen4e_farmerdata.sqlschema.sql[C[C[C[C[Cexit[K;[Kexit@nguyen4e_farmerschema.sql[2Pdata.sql[1P.sql[1P.sql[1P.sqlr.sqlo.sqlp.sqlt.sqla.sqlb.sqll.sqle.sql[C[C[C[C[C[C[C[C[C[?2004l[K@nguyen4e_farmerdroptable.sql
-
-7 rows deleted.
-
-
-4 rows deleted.
-
-
-4 rows deleted.
-
-
-5 rows deleted.
-
-[K
-Commit complete.
-
-[K
-Table dropped.
-
-[K
-Table dropped.
-
-[K
-Table dropped.
-
-[K
-Table dropped.
-
-
-Commit complete.
-
-SQL> [KSQL> [K[?2004hSQL> exc[Kit[?2004l[Kexit
-[KDisconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
-With the Partitioning, OLAP, Data Mining and Real Application Testing options
-[?2004h]0;nguyen4e@bravo: ~[01;32mnguyen4e@bravo[00m:[01;34m~[00m$ exit
-[?2004lexit
-
-Script done on 2023-11-17 12:47:46-05:00 [COMMAND_EXIT_CODE="0"]
